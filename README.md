@@ -22,7 +22,7 @@ If you find it useful, please help us by citing this work as following:
 }
 ```
 
-## Pre-trained Models
+## Pre-Trained Models
 
 We provided three pre-trained models, GENet-large/normal/small.
 
