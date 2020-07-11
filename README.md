@@ -1,3 +1,4 @@
+
 [![arXiv](http://img.shields.io/badge/cs.CV-arXiv%3A2004.08955-B31B1B.svg)](https://arxiv.org/abs/2006.14090)
 
 # GENet: A GPU-Efficient Network
@@ -107,3 +108,7 @@ x = get_one_image_from_your_dataset(input_image_size=input_image_size)
 x = x.cuda(gpu)
 output = model(x)
 ```
+
+
+# License
+Copyright (C) 2010-2020 Alibaba Group Holding Limited. Released under the Apache License.

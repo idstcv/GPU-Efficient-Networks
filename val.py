@@ -1,4 +1,6 @@
 '''
+Copyright (C) 2010-2020 Alibaba Group Holding Limited.
+
 Usage:
 python val.py --data ~/data/imagenet --arch GENet_large --params_dir ./GENet_models/
 '''
