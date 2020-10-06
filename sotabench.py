@@ -16,6 +16,7 @@ download_file_from_google_drive(file_id, destination, filename=filename)
 
 input_image_size = 256
 model = GENet.genet_large(pretrained=True, root='./GENet_params/')
+model = GENet.fuse_bn(model)
 
 input_image_crop = 0.875
 resize_image_size = int(math.ceil(input_image_size / input_image_crop))
