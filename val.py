@@ -2,10 +2,11 @@
 Copyright (C) 2010-2020 Alibaba Group Holding Limited.
 
 Usage:
-python val.py --data ~/data/imagenet --arch GENet_large --params_dir ./GENet_models/
+python val.py --data ~/data/imagenet --arch GENet_large --params_dir ./GENet_params/ --batch_size 928
 '''
 import os, sys, argparse, math, PIL
 import torch
+from torch import nn
 from torchvision import transforms, datasets
 
 
@@ -13,6 +14,7 @@ from torchvision import transforms, datasets
 import GENet
 
 imagenet_data_dir = os.path.expanduser('~/data/imagenet')
+
 
 def accuracy(output, target, topk=(1, )):
     """Computes the accuracy over the k top predictions for the specified values of k"""
@@ -79,6 +81,9 @@ if __name__ == '__main__':
     val_dataset = datasets.ImageFolder(val_dir, transformer)
     val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=False,
                                               num_workers=opt.workers, pin_memory=True, sampler=None)
+
+
+    model = GENet.fuse_bn(model)
     
     # load model
     torch.cuda.set_device(opt.gpu)
@@ -88,6 +93,8 @@ if __name__ == '__main__':
         model = amp.initialize(model, opt_level="O1")
     else:
         model = model.half()
+
+
 
     print('Using GPU {}.'.format(opt.gpu))
 
