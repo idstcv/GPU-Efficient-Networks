@@ -58,78 +58,80 @@ del model
 gc.collect()
 torch.cuda.empty_cache()
 
-# # GENet-normal
-# file_id = '1rpL0BKI_l5Xg4vN5fHGXPzTna5kW9hfs'
-# destination = './GENet_params/'
-# filename = 'GENet_normal.pth'
-# download_file_from_google_drive(file_id, destination, filename=filename)
-# input_image_size = 192
-# model = GENet.genet_normal(pretrained=True, root='./GENet_params/')
-#
-# input_image_crop = 0.875
-# resize_image_size = int(math.ceil(input_image_size / input_image_crop))
-# transforms_normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-# transform_list = [transforms.Resize(resize_image_size),
-#                   transforms.CenterCrop(input_image_size), transforms.ToTensor(), transforms_normalize]
-# transformer = transforms.Compose(transform_list)
-# # load model
-# model = model.cuda().half()
-# model.eval()
-#
-# print('Benchmarking GENet-normal')
-# # Run the benchmark
-# ImageNet.benchmark(
-#     model=model,
-#     paper_model_name='GENet-normal',
-#     paper_arxiv_id='2006.14090',
-#     input_transform=transformer,
-#     send_data_to_device=send_data,
-#     batch_size=128,
-#     num_workers=8,
-#     num_gpu=1,
-#     pin_memory=True,
-#     paper_results={'Top 1 Accuracy': 0.800},
-#     model_description="GENet-normal"
-# )
-#
-# del model
-# gc.collect()
-# torch.cuda.empty_cache()
-#
-# # GENet-light
-# file_id = '1jAkklQlQFPZi4odKUvbKEsNPYSS76GAv'
-# destination = './GENet_params/'
-# filename = 'GENet_small.pth'
-# download_file_from_google_drive(file_id, destination, filename=filename)
-# input_image_size = 192
-# model = GENet.genet_small(pretrained=True, root='./GENet_params/')
-#
-# input_image_crop = 0.875
-# resize_image_size = int(math.ceil(input_image_size / input_image_crop))
-# transforms_normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-# transform_list = [transforms.Resize(resize_image_size),
-#                   transforms.CenterCrop(input_image_size), transforms.ToTensor(), transforms_normalize]
-# transformer = transforms.Compose(transform_list)
-# # load model
-# model = model.cuda().half()
-# model.eval()
-#
-# print('Benchmarking GENet-light')
-# # Run the benchmark
-# ImageNet.benchmark(
-#     model=model,
-#     paper_model_name='GENet-light',
-#     paper_arxiv_id='2006.14090',
-#     input_transform=transformer,
-#     send_data_to_device=send_data,
-#     batch_size=128,
-#     num_workers=8,
-#     num_gpu=1,
-#     pin_memory=True,
-#     paper_results={'Top 1 Accuracy': 0.757},
-#     model_description="GENet-light"
-# )
-#
-# del model
-# gc.collect()
-# torch.cuda.empty_cache()
+# GENet-normal
+file_id = '1rpL0BKI_l5Xg4vN5fHGXPzTna5kW9hfs'
+destination = './GENet_params/'
+filename = 'GENet_normal.pth'
+download_file_from_google_drive(file_id, destination, filename=filename)
+input_image_size = 192
+model = GENet.genet_normal(pretrained=True, root='./GENet_params/')
+model = GENet.fuse_bn(model)
+
+input_image_crop = 0.875
+resize_image_size = int(math.ceil(input_image_size / input_image_crop))
+transforms_normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+transform_list = [transforms.Resize(resize_image_size),
+                  transforms.CenterCrop(input_image_size), transforms.ToTensor(), transforms_normalize]
+transformer = transforms.Compose(transform_list)
+# load model
+model = model.cuda().half()
+model.eval()
+
+print('Benchmarking GENet-normal')
+# Run the benchmark
+ImageNet.benchmark(
+    model=model,
+    paper_model_name='GENet-normal-pro',
+    paper_arxiv_id='2006.14090',
+    input_transform=transformer,
+    send_data_to_device=send_data,
+    batch_size=1528,
+    num_workers=16,
+    num_gpu=1,
+    pin_memory=True,
+    paper_results={'Top 1 Accuracy': 0.800},
+    model_description="GENet-normal-pro"
+)
+
+del model
+gc.collect()
+torch.cuda.empty_cache()
+
+# GENet-light
+file_id = '1jAkklQlQFPZi4odKUvbKEsNPYSS76GAv'
+destination = './GENet_params/'
+filename = 'GENet_small.pth'
+download_file_from_google_drive(file_id, destination, filename=filename)
+input_image_size = 192
+model = GENet.genet_small(pretrained=True, root='./GENet_params/')
+model = GENet.fuse_bn(model)
+
+input_image_crop = 0.875
+resize_image_size = int(math.ceil(input_image_size / input_image_crop))
+transforms_normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+transform_list = [transforms.Resize(resize_image_size),
+                  transforms.CenterCrop(input_image_size), transforms.ToTensor(), transforms_normalize]
+transformer = transforms.Compose(transform_list)
+# load model
+model = model.cuda().half()
+model.eval()
+
+print('Benchmarking GENet-light')
+# Run the benchmark
+ImageNet.benchmark(
+    model=model,
+    paper_model_name='GENet-light-pro',
+    paper_arxiv_id='2006.14090',
+    input_transform=transformer,
+    send_data_to_device=send_data,
+    batch_size=1528,
+    num_workers=16,
+    num_gpu=1,
+    pin_memory=True,
+    paper_results={'Top 1 Accuracy': 0.757},
+    model_description="GENet-light-pro"
+)
+
+del model
+gc.collect()
+torch.cuda.empty_cache()
