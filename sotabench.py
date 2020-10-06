@@ -16,6 +16,7 @@ download_file_from_google_drive(file_id, destination, filename=filename)
 
 input_image_size = 256
 model = GENet.genet_large(pretrained=True, root='./GENet_params/')
+model = GENet.fuse_bn(model)
 
 input_image_crop = 0.875
 resize_image_size = int(math.ceil(input_image_size / input_image_crop))
@@ -45,8 +46,8 @@ ImageNet.benchmark(
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
-    batch_size=128,
-    num_workers=8,
+    batch_size=1528,
+    num_workers=16,
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.813},
