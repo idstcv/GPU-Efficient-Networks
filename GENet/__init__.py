@@ -11,6 +11,83 @@ import torch.nn.functional as F
 import numpy as np
 import uuid
 
+#------------ Fuse BN ------
+
+
+
+def _fuse_convkx_and_bn_(convkx, bn):
+    the_weight_scale = bn.weight / torch.sqrt(bn.running_var + bn.eps)
+    convkx.weight[:] = convkx.weight * the_weight_scale.view((-1, 1, 1, 1))
+    the_bias_shift = (bn.weight * bn.running_mean) / \
+                     torch.sqrt(bn.running_var + bn.eps)
+    bn.weight[:] = 1
+    bn.bias[:] = bn.bias - the_bias_shift
+    bn.running_var[:] = 1.0 - bn.eps
+    bn.running_mean[:] = 0.0
+    # convkx.register_parameter('bias', bn.bias)
+    convkx.bias = nn.Parameter(bn.bias)
+
+def remove_bn_in_superblock(super_block):
+
+    new_shortcut_list = []
+    for the_seq_list in super_block.shortcut_list:
+        assert isinstance(the_seq_list, nn.Sequential)
+        new_seq_list = []
+        last_block = None
+        for block in the_seq_list:
+            if isinstance(block, nn.BatchNorm2d):
+                _fuse_convkx_and_bn_(last_block, block)
+                # print('--debug fuse shortcut bn')
+            else:
+                new_seq_list.append(block)
+            last_block = block
+        new_shortcut_list.append(nn.Sequential(*new_seq_list))
+
+    super_block.shortcut_list = nn.ModuleList(new_shortcut_list)
+
+    new_conv_list = []
+    for the_seq_list in super_block.conv_list:
+        assert isinstance(the_seq_list, nn.Sequential)
+        new_seq_list = []
+        last_block = None
+        for block in the_seq_list:
+            if isinstance(block, nn.BatchNorm2d):
+                _fuse_convkx_and_bn_(last_block, block)
+                # print('--debug fuse conv bn')
+            else:
+                new_seq_list.append(block)
+            last_block = block
+        new_conv_list.append(nn.Sequential(*new_seq_list))
+
+    super_block.conv_list = nn.ModuleList(new_conv_list)
+
+
+def fuse_bn(model):
+    the_block_list = model.block_list
+    last_block = the_block_list[0]
+    new_block_list = [last_block]
+    for the_block in the_block_list[1:]:
+        if isinstance(the_block, BN):
+            _fuse_convkx_and_bn_(last_block.netblock, the_block.netblock)
+        else:
+            new_block_list.append(the_block)
+        last_block = the_block
+    pass
+
+    the_block_list = new_block_list
+    for the_block in the_block_list:
+        if hasattr(the_block, 'shortcut_list'):
+            remove_bn_in_superblock(the_block)
+        else:
+            continue
+
+
+    model.block_list = new_block_list
+    model.module_list = nn.ModuleList(new_block_list)
+
+    return model
+#------------ end of fuse bn --------
+
 
 def _create_netblock_list_from_str_(s, no_create=False):
     block_list = []
@@ -47,6 +124,8 @@ def _get_right_parentheses_index_(s):
         else:
             pass
     return None
+
+
 
 '''
 -------------------- GENet Blocks --------------------
