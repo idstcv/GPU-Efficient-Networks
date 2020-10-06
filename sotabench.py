@@ -37,11 +37,11 @@ def send_data(input, target, device, dtype=torch.float16, non_blocking: bool = T
     return input, target
 
 
-print('Benchmarking GENet-large')
+print('Benchmarking GENet-large-pro')
 # Run the benchmark
 ImageNet.benchmark(
     model=model,
-    paper_model_name='GENet-large',
+    paper_model_name='GENet-large-pro',
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
@@ -50,7 +50,7 @@ ImageNet.benchmark(
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.813},
-    model_description="GENet-large"
+    model_description="GENet-large-pro"
 )
 
 del model
