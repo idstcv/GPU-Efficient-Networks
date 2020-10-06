@@ -24,38 +24,38 @@ transform_list = [transforms.Resize(resize_image_size),
                   transforms.CenterCrop(input_image_size), transforms.ToTensor(), transforms_normalize]
 transformer = transforms.Compose(transform_list)
 # load model
-model = model.cuda().half()
-model.eval()
-
-
-def send_data(input, target, device, dtype=torch.float16, non_blocking: bool = True):
-    input = input.to(device=device, dtype=dtype, non_blocking=non_blocking)
-
-    if target is not None:
-        target = target.to(device=device, dtype=dtype, non_blocking=non_blocking)
-
-    return input, target
-
-
-print('Benchmarking GENet-large-pro')
-# Run the benchmark
-ImageNet.benchmark(
-    model=model,
-    paper_model_name='GENet-large-pro',
-    paper_arxiv_id='2006.14090',
-    input_transform=transformer,
-    send_data_to_device=send_data,
-    batch_size=128,
-    num_workers=8,
-    num_gpu=1,
-    pin_memory=True,
-    paper_results={'Top 1 Accuracy': 0.813},
-    model_description="GENet-large-pro"
-)
-
-del model
-gc.collect()
-torch.cuda.empty_cache()
+# model = model.cuda().half()
+# model.eval()
+#
+#
+# def send_data(input, target, device, dtype=torch.float16, non_blocking: bool = True):
+#     input = input.to(device=device, dtype=dtype, non_blocking=non_blocking)
+#
+#     if target is not None:
+#         target = target.to(device=device, dtype=dtype, non_blocking=non_blocking)
+#
+#     return input, target
+#
+#
+# print('Benchmarking GENet-large-pro')
+# # Run the benchmark
+# ImageNet.benchmark(
+#     model=model,
+#     paper_model_name='GENet-large-pro',
+#     paper_arxiv_id='2006.14090',
+#     input_transform=transformer,
+#     send_data_to_device=send_data,
+#     batch_size=128,
+#     num_workers=8,
+#     num_gpu=1,
+#     pin_memory=True,
+#     paper_results={'Top 1 Accuracy': 0.813},
+#     model_description="GENet-large-pro"
+# )
+#
+# del model
+# gc.collect()
+# torch.cuda.empty_cache()
 
 # # GENet-normal
 # file_id = '1rpL0BKI_l5Xg4vN5fHGXPzTna5kW9hfs'
