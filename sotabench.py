@@ -42,7 +42,7 @@ print('Benchmarking GENet-large')
 # Run the benchmark
 ImageNet.benchmark(
     model=model,
-    paper_model_name='GENet-large_pro',
+    paper_model_name='GENet-large-pro',
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
