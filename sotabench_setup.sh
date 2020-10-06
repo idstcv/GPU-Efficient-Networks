@@ -51,9 +51,9 @@
 #gdown https://drive.google.com/uc?id=14X7xL1uf3c9dVGzRdV49bTjCBNvT9koA
 #gdown https://drive.google.com/uc?id=1HKFZEWPIwk5ZR0_MjJNkpQLyM_0yX0Qq
 
-#apt-get install wget
-#wget https://onedrive.hyper.ai/down/ImageNet/data/ImageNet2012/ILSVRC2012_devkit_t12.tar.gz -P ./.data/vision/imagenet
-#wget https://onedrive.hyper.ai/down/ImageNet/data/ImageNet2012/ILSVRC2012_img_val.tar -P ./.data/vision/imagenet
+apt-get install wget
+wget https://onedrive.hyper.ai/down/ImageNet/data/ImageNet2012/ILSVRC2012_devkit_t12.tar.gz -P ./.data/vision/imagenet
+wget https://onedrive.hyper.ai/down/ImageNet/data/ImageNet2012/ILSVRC2012_img_val.tar -P ./.data/vision/imagenet
 
 # gdown https://drive.google.com/file/d/1pySDEdfvLRROaNXi-fWrd_aV9N6W9Yjo/view?usp=sharing
 #gdown https://drive.google.com/uc?id=1cTOwVmxLqWhNl8zg2ZZJfiyejEcOq1RR
