@@ -16,7 +16,6 @@ download_file_from_google_drive(file_id, destination, filename=filename)
 
 input_image_size = 256
 model = GENet.genet_large(pretrained=True, root='./GENet_params/')
-model = GENet.fuse_bn(model)
 
 input_image_crop = 0.875
 resize_image_size = int(math.ceil(input_image_size / input_image_crop))
@@ -42,7 +41,7 @@ print('Benchmarking GENet-large')
 # Run the benchmark
 ImageNet.benchmark(
     model=model,
-    paper_model_name='GENet-large-pro',
+    paper_model_name='GENet-large',
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
@@ -51,7 +50,7 @@ ImageNet.benchmark(
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.813},
-    model_description="GENet-large_pro"
+    model_description="GENet-large"
 )
 
 del model
@@ -91,11 +90,11 @@ torch.cuda.empty_cache()
 #     paper_results={'Top 1 Accuracy': 0.800},
 #     model_description="GENet-normal"
 # )
-
+#
 # del model
 # gc.collect()
 # torch.cuda.empty_cache()
-
+#
 # # GENet-light
 # file_id = '1jAkklQlQFPZi4odKUvbKEsNPYSS76GAv'
 # destination = './GENet_params/'
