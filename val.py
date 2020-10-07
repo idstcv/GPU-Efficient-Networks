@@ -83,7 +83,7 @@ if __name__ == '__main__':
                                               num_workers=opt.workers, pin_memory=True, sampler=None)
 
 
-    model = GENet.fuse_bn(model)
+    # model = GENet.fuse_bn(model)
     
     # load model
     torch.cuda.set_device(opt.gpu)
