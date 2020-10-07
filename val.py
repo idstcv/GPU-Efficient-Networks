@@ -4,7 +4,7 @@ Copyright (C) 2010-2020 Alibaba Group Holding Limited.
 Usage (on V100 with 16GB GPU-memory):
 python val.py --data ~/data/imagenet --arch GENet_large --params_dir ./GENet_params/ --batch_size 1528
 '''
-import os, sys, argparse, math, PIL
+import os, sys, argparse, math, PIL, time
 import torch
 from torch import nn
 from torchvision import transforms, datasets
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', type=int, default=128,
                         help='batch size for evaluation.')
-    parser.add_argument('--workers', type=int, default=6,
+    parser.add_argument('--workers', type=int, default=12,
                         help='number of workers to load dataset.')
     parser.add_argument('--use_apex', action='store_true',
                         help='Use NVIDIA Apex (float16 precision).')
@@ -99,13 +99,17 @@ if __name__ == '__main__':
     print('Using GPU {}.'.format(opt.gpu))
 
     model.eval()
+    # model.requires_grad_(False)
+
     acc1_sum = 0
     acc5_sum = 0
     n = 0
+    timer_start = time.time()
+    device = 'cuda:{}'.format(opt.gpu)
     with torch.no_grad():
         for i, (input, target) in enumerate(val_loader):
-            input = input.cuda(opt.gpu, non_blocking=True).half()
-            target = target.cuda(opt.gpu, non_blocking=True)
+            input = input.to(device=device, non_blocking=True, dtype=torch.float16)
+            target = target.to(device=device, non_blocking=True, dtype=torch.float16)
             output = model(input)
             acc1, acc5 = accuracy(output, target, topk=(1, 5))
 
@@ -122,7 +126,11 @@ if __name__ == '__main__':
     acc1_avg = acc1_sum / n
     acc5_avg = acc5_sum / n
 
-    print('*** arch={}, validation top-1 acc={}%, top-5 acc={}%, number of evaluated images={}'.format(opt.arch, acc1_avg, acc5_avg, n))
+    timer_end = time.time()
+    speed = float(n) / (timer_end - timer_start)
+
+    print('*** arch={}, validation top-1 acc={}%, top-5 acc={}%, number of evaluated images={}, speed={:4g} img/s'.format(
+        opt.arch, acc1_avg, acc5_avg, n, speed))
 
 
 
