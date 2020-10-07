@@ -28,12 +28,11 @@ transformer = transforms.Compose(transform_list)
 model = model.cuda().half()
 model.eval()
 
-
 def send_data(input, target, device, dtype=torch.float16, non_blocking: bool = True):
-    input = input.to(device=device, dtype=dtype, non_blocking=non_blocking)
+    input = input.to(device=device, dtype=torch.float16, non_blocking=non_blocking)
 
     if target is not None:
-        target = target.to(device=device, dtype=dtype, non_blocking=non_blocking)
+        target = target.to(device=device, dtype=torch.float16, non_blocking=non_blocking)
 
     return input, target
 
@@ -46,8 +45,8 @@ ImageNet.benchmark(
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
-    batch_size=1528,
-    num_workers=16,
+    batch_size=64,
+    num_workers=12,
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.813},
@@ -85,8 +84,8 @@ ImageNet.benchmark(
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
-    batch_size=1528,
-    num_workers=16,
+    batch_size=64,
+    num_workers=12,
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.800},
@@ -124,8 +123,8 @@ ImageNet.benchmark(
     paper_arxiv_id='2006.14090',
     input_transform=transformer,
     send_data_to_device=send_data,
-    batch_size=1528,
-    num_workers=16,
+    batch_size=64,
+    num_workers=12,
     num_gpu=1,
     pin_memory=True,
     paper_results={'Top 1 Accuracy': 0.757},
