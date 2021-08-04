@@ -1316,7 +1316,7 @@ def exists(val):
     return val is not None
 
 class PlainNet(nn.Module):
-    def __init__(self, num_classes=None, plainnet_struct=None, no_create=False, **kwargs):
+    def __init__(self, num_classes=None, plainnet_struct=None, proj=True, no_create=False, **kwargs):
         super(PlainNet, self).__init__(**kwargs)
         self.num_classes = num_classes
         self.plainnet_struct = plainnet_struct
@@ -1337,7 +1337,7 @@ class PlainNet(nn.Module):
 
         self.last_channels = self.adptive_avg_pool.out_channels
 
-        if no_create:
+        if proj:
             self.fc_linear = None
         else:
             self.fc_linear = nn.Linear(self.last_channels, self.num_classes, bias=True)
