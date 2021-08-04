@@ -1337,7 +1337,7 @@ class PlainNet(nn.Module):
 
         self.last_channels = self.adptive_avg_pool.out_channels
 
-        if proj:
+        if not proj:
             self.fc_linear = None
         else:
             self.fc_linear = nn.Linear(self.last_channels, self.num_classes, bias=True)
