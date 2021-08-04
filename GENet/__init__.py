@@ -1312,6 +1312,9 @@ _all_netblocks_dict_ = {
 }
 
 
+def exists(val):
+    return val is not None
+
 class PlainNet(nn.Module):
     def __init__(self, num_classes=None, plainnet_struct=None, no_create=False, **kwargs):
         super(PlainNet, self).__init__(**kwargs)
@@ -1348,7 +1351,8 @@ class PlainNet(nn.Module):
 
         output = self.adptive_avg_pool(output)
         output = torch.flatten(output, 1)
-        output = self.fc_linear(output)
+        if exists(self.fc_linear):
+            output = self.fc_linear(output)
         return output
 
 def genet_large(pretrained=False, num_classes=1000, root='./GENet_params'):
