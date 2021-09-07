@@ -53,7 +53,7 @@ git clone https://github.com/idstcv/GPU-Efficient-Networks.git
 cd GPU-Efficient-Networks
 ```
 
-+ Download pre-trained parameters to ./GENet_params. [[Google Drive download link]](https://drive.google.com/drive/folders/1OEksQF3fyx233z_DGD2tMLE96LxgS072?usp=sharing)
++ The pre-trained weights should be automatically downloaded to ./GENet_params once you load the model.
 
 ### Evaluate the Pre-trained Model
 
