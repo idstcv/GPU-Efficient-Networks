@@ -1351,6 +1351,22 @@ class PlainNet(nn.Module):
         output = self.fc_linear(output)
         return output
 
+
+
+def download_pth(param_dir):
+    import urllib.request
+    import distutils.dir_util
+    distutils.dir_util.mkpath(param_dir)
+    model_url_dict = {
+        'GENet_large.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_large.pth',
+        'GENet_small.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_small.pth',
+        'GENet_normal.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_normal.pth',
+    }
+    for pth_fn, url_path in model_url_dict.items():
+        print('downloadinig {} to {}'.format(url_path, pth_fn))
+        urllib.request.urlretrieve(url=url_path, filename=os.path.join(param_dir, pth_fn))
+
+
 def genet_large(pretrained=False, num_classes=1000, root='./GENet_params'):
     this_file_dir = os.path.dirname(__file__)
     plainnet_txt = os.path.join(this_file_dir, 'GENet_large.txt')
@@ -1365,7 +1381,8 @@ def genet_large(pretrained=False, num_classes=1000, root='./GENet_params'):
     if pretrained:
         pth_file = os.path.join(root, 'GENet_large.pth')
         if not os.path.isfile(pth_file):
-            raise RuntimeError('Cannnot find {}! Please download the GENet_*.pth and GENet_*.txt files to {}'.format(pth_file, root))
+            if not os.path.isfile(pth_file):            
+                download_pth(param_dir=root)
 
         checkpoint = torch.load(pth_file, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'], strict=True)
@@ -1386,7 +1403,8 @@ def genet_normal(pretrained=False, num_classes=1000, root='./GENet_params'):
     if pretrained:
         pth_file = os.path.join(root, 'GENet_normal.pth')
         if not os.path.isfile(pth_file):
-            raise RuntimeError('Cannnot find {}! Please download the GENet_*.pth and GENet_*.txt files to {}'.format(pth_file, root))
+            if not os.path.isfile(pth_file):            
+                download_pth(param_dir=root)
 
         checkpoint = torch.load(pth_file, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'], strict=True)
@@ -1404,10 +1422,10 @@ def genet_small(pretrained=False, num_classes=1000, root='./GENet_params'):
 
     model = PlainNet(num_classes=num_classes, plainnet_struct=plainnet_struct)
 
-    if pretrained:
+    if pretrained:        
         pth_file = os.path.join(root, 'GENet_small.pth')
-        if not os.path.isfile(pth_file):
-            raise RuntimeError('Cannnot find {}! Please download the GENet_*.pth and GENet_*.txt files to {}'.format(pth_file, root))
+        if not os.path.isfile(pth_file):            
+            download_pth(param_dir=root)
 
         checkpoint = torch.load(pth_file, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'], strict=True)
