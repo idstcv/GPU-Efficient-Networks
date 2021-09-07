@@ -1,6 +1,10 @@
 
 [![arXiv](http://img.shields.io/badge/cs.CV-arXiv%3A2004.08955-B31B1B.svg)](https://arxiv.org/abs/2006.14090)
 
+# Merge to New Project Zen-NAS
+
+This project is obsoleted and the development is merged into our ICCV 2021 work Zen-NAS. The new Github repository is [[here]](https://github.com/idstcv/ZenNAS).
+
 # GENet: A GPU-Efficient Network
 
 A new deep neural network structure specially optimized for high inference speed on modern GPU. 
